@@ -1,33 +1,25 @@
-// Publisher.js
-const readline = require('readline');
+const Redis = require('ioredis');
+const redis = new Redis();
 
-class Publisher {
-  constructor() {
-    this.subscribers = [];
-    this.rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-  }
-
-  subscribe(subscriber) {
-    this.subscribers.push(subscriber);
-  }
-
-  publish(message) {
-    this.subscribers.forEach(subscriber => {
-      subscriber.notify(message);
-    });
-  }
-
-  start() {
-    console.log("Publisher started. Enter your message (press Ctrl+C to exit): ");
-    this.rl.on('line', (input) => {
-        console.log("Publisher Published the Message Successfully");
-      this.publish(input);
-     
-    });
-  }
+// Function to publish messages
+async function publish(channel, message) {
+    await redis.publish(channel, message);
 }
 
-module.exports = Publisher;
+// Extract channel name from command-line arguments
+const [, , channel, message] = process.argv;
+
+// Check if channel name is provided
+if (!channel) {
+    console.error('Please provide a channel name.');
+    process.exit(1);
+}
+
+// Check if message is provided
+if (!message) {
+    console.error('Please provide a message to publish.');
+    process.exit(1);
+}
+
+// Example usage
+publish(channel, message);
