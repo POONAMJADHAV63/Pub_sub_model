@@ -1,0 +1,13 @@
+
+{
+  "name": "pubsub",
+  "version": "1.0.0",
+  "scripts": {
+    "publisher": "node publisher.js",
+    "subscriber": "node subscriber.js",
+    "start": "concurrently \"npm run publisher\" \"npm run subscriber\""
+  },
+  "dependencies": {
+    "concurrently": "^6.0.0"
+  }
+}
